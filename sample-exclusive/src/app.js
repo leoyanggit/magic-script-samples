@@ -1,6 +1,6 @@
 import gl from 'gl';
 import egl from 'egl';
-import { ExclusiveRender, LandscapeApp, FPS_DELTA } from 'lumin';
+import { ExclusiveRender, LandscapeApp, ImmersiveApp, FPS_DELTA } from 'lumin';
 import * as mat4 from 'gl-matrix/esm/mat4.js';
 
 function makeProgram (vs, fs) {
@@ -164,11 +164,13 @@ function initGL () {
   return { context, fs, vs, program, positions, colors, elements };
 }
 
-export class App extends LandscapeApp {
+export class App extends ImmersiveApp {
   init () {
     this.setEventSleepTime(FPS_DELTA); // make this a FPS APS
 
     let prism = this.requestNewPrism([2, 3, 0.5]);
+
+    //this.positionPrism(prism, [0, 0, -1]);
 
     let { context, program, positions, colors, elements } = initGL();
     this.positions = positions;
