@@ -47,7 +47,7 @@ export class App extends LandscapeApp {
     if (!(evt instanceof EyeTrackingEventData)) { return true; }
 
     // Get eye positions in prism coordinates
-    const prismToWorld = new Matrix4().fromArray(this.prism.getTransform().flat());
+    const prismToWorld = new Matrix4().fromArray(this.prism.getTransform());
     const worldToPrism = new Matrix4().getInverse(prismToWorld);
     let pl = new Vector4(...evt.getEyeTrackingLeftEyePosition(), 1).applyMatrix4(worldToPrism);
     let pr = new Vector4(...evt.getEyeTrackingRightEyePosition(), 1).applyMatrix4(worldToPrism);
@@ -58,16 +58,17 @@ export class App extends LandscapeApp {
       .multiply(new Matrix4().makeTranslation(-0.25, -0.25, 0))
       .multiply(new Matrix4().makeScale(0.5, 0.5, 0.5));
     let look = quadToPrism.toArray();
-    look = [
-      look.slice(0, 4),
-      look.slice(4, 8),
-      look.slice(8, 12),
-      look.slice(12, 16)
-    ];
+    //look = new Float32Array(look);
+    //look = [
+    //  look.slice(0, 4),
+    //  look.slice(4, 8),
+    //  look.slice(8, 12),
+    //  look.slice(12, 16)
+    //];
     console.log(look);
     this.quad.setLocalTransform(look);
     // Get quad vertices in prism coordinates
-    // const quadToPrism = new Matrix4().fromArray(this.quad.getCurrentPrismTransform().flat());
+    // const quadToPrism = new Matrix4().fromArray(this.quad.getCurrentPrismTransform().fhhhlat());
     let vertices = this.quad.getVertices();
     // bottom-left
     let pa = new Vector4(...vertices[0], 1).applyMatrix4(quadToPrism);

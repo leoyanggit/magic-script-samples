@@ -5,9 +5,13 @@ import { scandir } from 'magic-script-polyfills/src/fs.js';
 import { PrismController, LandscapeApp, ui, CursorHoverState } from 'lumin';
 const { Cursor, UiText, EclipseLabelType, Alignment, HorizontalTextAlignment } = ui;
 
+import { hrtime } from 'uv'
+
 let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 let w = 0.5;
 let h = 0.5;
+var frameCost = 0;
+var frameCount = 0;
 class Controller extends PrismController {
   onAttachPrism () {
     // Create a new prism that's half a meter cubed.
@@ -91,11 +95,15 @@ class Controller extends PrismController {
     // load('iching-01.glsl');
     // load('ikeda.glsl');
     // load('voroni.glsl');
+    setInterval(() => {
+      print("Webgl frame cost stats", frameCost, frameCount, frameCost / frameCount);
+    }, 1000);
   }
   onUpdate (delta) {
     this.time += delta;
     let { prism, update, time, surface, context, text, width, height } = this;
     egl.makeCurrent(surface, surface, context);
+    let frameStart = hrtime();
     if (update) {
       let [x, y] = Cursor.GetPosition(prism);
       x = width * (x / w + 0.5);
@@ -107,6 +115,8 @@ class Controller extends PrismController {
       gl.clear(gl.COLOR_BUFFER_BIT);
     }
     text.setLocalPosition([0, 0, Math.sin(time) * 0.04]);
+    frameCost += (hrtime() - frameStart) / 1000000;
+    frameCount++;
     egl.swapBuffers(surface);
     return true;
   }
