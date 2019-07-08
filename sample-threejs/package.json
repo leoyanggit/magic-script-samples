@@ -19,7 +19,7 @@
   "dependencies": {
     "gl-matrix": "^3.0.0",
     "magic-script-polyfills": "^2.1.0",
-    "magic-script-webgl-prism-controller": "^2.0.0",
+    "magic-script-webgl-prism-controller": "https://github.com/magic-script/magic-script-webgl-prism-controller.git",
     "three": "^0.104.0"
   }
 }

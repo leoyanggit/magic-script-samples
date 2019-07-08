@@ -17,6 +17,8 @@ import perspective from './perspective.js';
 
 import gl from 'gl';
 
+import { frameCost, frameCount } from "magic-script-webgl-prism-controller";
+
 export class App extends LandscapeApp {
   init () {
     const left = new PerspectiveCamera();
@@ -119,6 +121,10 @@ window.onload = () => {
   var torusKnot = new Mesh(geometry, material);
 
   scene.add(torusKnot);
+
+  setInterval(() => {
+    print("Webgl frame cost stats", frameCost, frameCount, frameCost / frameCount);
+  }, 1000);
 
   var render = function (time) {
     window.requestAnimationFrame(render);
