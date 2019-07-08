@@ -1,4 +1,5 @@
 import React from 'react';
+import { hrtime } from 'uv';
 
 export default class TextSlider extends React.Component {
     constructor(props) {
@@ -11,6 +12,10 @@ export default class TextSlider extends React.Component {
 
         this.onPreviousClick = this.onPreviousClick.bind(this);
         this.onNextClick = this.onNextClick.bind(this);
+        this.prev = false;
+        this.next = false;
+        this.prevStart = 0;
+        this.nextStart = 0;
     }
 
     onPreviousClick(event) {
@@ -20,6 +25,9 @@ export default class TextSlider extends React.Component {
             this.state.currentPosition--;
         }
 
+        this.prev = true;
+        this.next = false;
+        this.prevStart = hrtime();
         this.setState( this.state );
     }
 
@@ -30,7 +38,21 @@ export default class TextSlider extends React.Component {
             this.state.currentPosition++;
         }
 
+        this.prev = false;
+        this.next = true;
+        this.nextStart = hrtime();
         this.setState( this.state );
+    }
+
+    componentDidUpdate() {
+        if (this.prev === true) {
+            this.prev = false;
+            print("React native prev ", (hrtime() - this.prevStart)/1000000);
+        }
+        if (this.next === true) {
+            this.next = false;
+            print("React native next ", (hrtime() - this.nextStart)/1000000);
+        }
     }
 
     render() {
